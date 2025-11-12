@@ -1,16 +1,44 @@
-<div class="sidebar">
-  <h2>Fit Plan</h2>
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+  <meta charset="UTF-8">
   <link rel="stylesheet" href="sidebar.css">
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Fit Plan</h2>
   
-  <div class="search-box">
-    <input type="text" placeholder="Pesquisar...">
+    <div class="search-box">
+      <input type="text" placeholder="Pesquisar...">
+    </div>
+
+ <ul class="menu">
+  <li><a href="../dashboard.html" target="_top">🏠 Dashboard</a></li>
+  <li><a href="../treinos.html" target="_top">💪 Treinos</a></li>
+  <li><a href="../dieta.html" target="_top">🥗 Dieta</a></li>
+  <li><a href="../progresso.html" target="_top">📊 Progresso</a></li>
+  <li><a href="../configs.html" target="_top">⚙️ Configurações</a></li>
+</ul>
+
   </div>
 
-  <ul class="menu">
-    <li><a href="../dashboard.html">🏠 Dashboard</a></li>
-    <li><a href="../treinos.html">💪 Treinos</a></li>
-    <li><a href="../dieta.html">🥗 Dieta</a></li>
-    <li><a href="../progresso.html">📊 Progresso</a></li>
-    <li><a href="../configss.html">⚙️ Configurações</a></li>
-  </ul>
-</div>
+  <script>
+    // Previne o bug: não recarrega se o link for para a mesma página
+    const links = document.querySelectorAll('.menu a');
+
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        // Página atual (ex: dashboard.html)
+        const currentPage = window.top.location.pathname.split('/').pop();
+        // Página de destino (ex: ../dashboard.html → dashboard.html)
+        const targetPage = link.getAttribute('href').split('/').pop();
+
+        if (targetPage === currentPage) {
+          e.preventDefault(); // evita o recarregamento
+          console.log('Já estás nesta página!');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
