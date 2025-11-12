@@ -1,0 +1,17 @@
+/* Sidebar fixa */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 320px;      /* suficiente para conter o botão e a sidebar */
+    height: 100vh;     /* altura total do ecrã */
+    border: none;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+/* Conteúdo principal */
+.main-content {
+    margin-left: 60px; /* ajusta o espaço lateral para não ficar em cima da sidebar */
+    padding: 20px;
+}
