@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Página principal</title>
+        <link rel="stylesheet" href="button.css">
+    </head>
+    <body>
+        <button id="toggleSidebar">></button> <!-- ícone de menu -->
+        <iframe id="sidebarIframe" src="sidebar.html"></iframe>
+
+        <script>
+            const toggleButton = document.getElementById('toggleSidebar');
+            const sidebar = document.getElementById('sidebarIframe');
+
+            toggleButton.addEventListener('click', () => {
+                sidebar.classList.toggle('show');
+
+                if(sidebar.classList.contains('show')) {
+                toggleButton.textContent = '<'; // muda para cruz
+                } else {
+                toggleButton.textContent = '>'; // volta para menu
+                }
+            });
+        </script>
+    </body>
+</html>
