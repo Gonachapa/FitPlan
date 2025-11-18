@@ -1,17 +1,290 @@
-/* Sidebar fixa */
+/* ===== Seu CSS existente ===== */
+body {
+    margin: 0;
+    padding: 0;
+    background: #0f1115;
+    font-family: "Inter", sans-serif;
+    color: #fff;
+    transition: 0.3s;
+}
+
+body.light-theme {
+    background: #f3f3f3;
+    color: #000;
+}
+
 .sidebar {
     position: fixed;
     top: 0;
     left: 0;
-    width: 320px;      /* suficiente para conter o botão e a sidebar */
-    height: 100vh;     /* altura total do ecrã */
+    width: 300px;
+    height: 100vh;
     border: none;
     z-index: 1000;
-    overflow: hidden;
+    background: transparent;
 }
 
-/* Conteúdo principal */
 .main-content {
-    margin-left: 60px; /* ajusta o espaço lateral para não ficar em cima da sidebar */
-    padding: 20px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    text-align: center;
+}
+
+.settings-card {
+    background: #1a1d23;
+    padding: 30px;
+    width: 480px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+body.light-theme .settings-card {
+    background: #fff;
+}
+
+.profile-pic-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.profile-pic-container img {
+    display: block;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #2e323b;
+    transition: 0.3s;
+}
+
+.profile-pic-container:hover img {
+    opacity: 0.8;
+}
+
+.overlay-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #2a62fc;
+    font-size: 30px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    user-select: none;
+    width: 32px;
+    height: 32px;
+}
+
+.profile-pic-container:hover .overlay-icon {
+    opacity: 1;
+}
+
+.input-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-group label {
+    font-size: 15px;
+    opacity: 0.8;
+}
+
+/* ===== Inputs e selects dentro de .input-group melhorados ===== */
+.input-group input,
+.input-group select {
+    background: #1f2229;            /* fundo escuro */
+    color: #fff;                    /* texto branco */
+    border: 1px solid #3a3d45;      /* borda sutil */
+    border-radius: 12px;             /* borda arredondada */
+    padding: 10px 15px;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* Remove a seta padrão do select e adiciona customizada */
+.input-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='0,40 70,100 140,40' stroke='white' stroke-width='15' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    cursor: pointer;
+}
+
+/* Hover */
+.input-group input:hover,
+.input-group select:hover {
+    border-color: #2a62fc;
+}
+
+/* Foco */
+.input-group input:focus,
+.input-group select:focus {
+    border-color: #2a62fc;
+    box-shadow: 0 0 10px rgba(42, 98, 252, 0.5);
+}
+
+/* ===== Textarea da Bio ===== */
+.input-group textarea {
+    background: #1f2229;       /* fundo escuro consistente */
+    color: #fff;               /* texto branco */
+    border: 1px solid #3a3d45; /* borda sutil */
+    border-radius: 12px;        /* bordas arredondadas */
+    padding: 12px 15px;         /* espaçamento interno */
+    font-size: 16px;
+    line-height: 1.5;
+    resize: vertical;           /* só permite redimensionar verticalmente */
+    min-height: 100px;          /* altura mínima confortável */
+    transition: all 0.3s ease;
+}
+
+/* Hover */
+.input-group textarea:hover {
+    border-color: #2a62fc;
+}
+
+/* Foco */
+.input-group textarea:focus {
+    border-color: #2a62fc;
+    box-shadow: 0 0 10px rgba(42, 98, 252, 0.5);
+    outline: none;
+}
+
+/* Tema claro */
+body.light-theme .input-group input,
+body.light-theme .input-group select,
+body.light-theme .input-group textarea {
+    background: #f0f0f0;
+    color: #000;
+    border: 1px solid #ccc;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+    border-color: #2a62fc;
+}
+
+.theme-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#themeBtn {
+    background: #30353f;
+    border: none;
+    padding: 10px 16px;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#themeBtn:hover {
+    background: #2a62fc;
+}
+
+.save-btn {
+    margin-top: 10px;
+    background: #2a62fc;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.save-btn:hover {
+    background: #30353f;
+}
+
+.diet-card {
+    background: #1a1d23;
+    padding: 25px;
+    width: 480px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+body.light-theme .diet-card {
+    background: #fff;
+    color: #000;
+}
+
+.diet-input label {
+    font-size: 15px;
+    opacity: 0.8;
+}
+
+.diet-input input,
+.diet-input select {
+    background: #0f1115;
+    border: 1px solid #24272e;
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s;
+}
+
+body.light-theme .diet-input input,
+body.light-theme .diet-input select {
+    background: #f0f0f0;
+    color: #000;
+    border: 1px solid #ccc;
+}
+
+.diet-input input:focus,
+.diet-input select:focus {
+    border-color: #2a62fc;
+}
+
+.diet-btn {
+    background: #2a62fc;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.diet-btn:hover {
+    background: #30353f;
+}
+
+#resultado {
+    background: #0f1115;
+    padding: 15px;
+    border-radius: 10px;
+    width: 100%;
+}
+
+body.light-theme #resultado {
+    background: #f0f0f0;
+    color: #000;
 }

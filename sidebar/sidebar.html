@@ -17,24 +17,21 @@
   <li><a href="../treinos.html" target="_top">💪 Treinos</a></li>
   <li><a href="../dieta.html" target="_top">🥗 Dieta</a></li>
   <li><a href="../progresso.html" target="_top">📊 Progresso</a></li>
-  <li><a href="../configs.html" target="_top">⚙️ Configurações</a></li>
+  <li><a href="../perfil.html" target="_top">⚙️ Perfil</a></li>
 </ul>
 
   </div>
 
   <script>
-    // Previne o bug: não recarrega se o link for para a mesma página
     const links = document.querySelectorAll('.menu a');
 
     links.forEach(link => {
       link.addEventListener('click', e => {
-        // Página atual (ex: dashboard.html)
         const currentPage = window.top.location.pathname.split('/').pop();
-        // Página de destino (ex: ../dashboard.html → dashboard.html)
         const targetPage = link.getAttribute('href').split('/').pop();
 
         if (targetPage === currentPage) {
-          e.preventDefault(); // evita o recarregamento
+          e.preventDefault();
           console.log('Já estás nesta página!');
         }
       });
