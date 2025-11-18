@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="button.css">
     </head>
     <body>
-        <button id="toggleSidebar">></button> <!-- ícone de menu -->
+        <button id="toggleSidebar">></button>
         <iframe id="sidebarIframe" src="sidebar.html"></iframe>
 
         <script>
@@ -16,9 +16,9 @@
                 sidebar.classList.toggle('show');
 
                 if(sidebar.classList.contains('show')) {
-                toggleButton.textContent = '<'; // muda para cruz
+                toggleButton.textContent = '<';
                 } else {
-                toggleButton.textContent = '>'; // volta para menu
+                toggleButton.textContent = '>';
                 }
             });
         </script>
