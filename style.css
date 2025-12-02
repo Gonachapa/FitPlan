@@ -1,18 +1,55 @@
-/* ===== Seu CSS existente ===== */
+/* =========================================== */
+/* == CORES BASE (Tailwind Fallback e Custom) == */
+/* =========================================== */
+
+/* Estilos de fundo escuro para a aplicação de fitness (Fundo muito escuro - Quase Preto) */
 body {
-    margin: 0;
-    padding: 0;
-    background: #0f1115;
-    font-family: "Inter", sans-serif;
-    color: #fff;
+    background-color: #0c0f16; /* Cor escura, quase preto azulado */
+    font-family: 'Inter', sans-serif;
+    color: #fff; /* Adicionado para consistência */
     transition: 0.3s;
 }
 
+/* Cor de destaque principal (Azul Fitness Vibrante: #3b82f6 - Tailwind blue-500) */
+.color-primary {
+    background-color: #3b82f6; 
+}
+
+/* Cor de destaque Hover (Azul mais escuro: #2563eb - Tailwind blue-600) */
+.color-primary-hover:hover {
+    background-color: #2563eb; 
+}
+
+/* Cor do texto de destaque */
+.text-primary {
+    color: #3b82f6;
+}
+
+/* Estilo da caixa de cartão principal (Fundo do Card: #1a1d23) */
+.auth-card {
+    background-color: #1a1d23; 
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+}
+
+/* Estilos para o botão Google */
+.google-btn {
+    background-color: #4285F4;
+    color: white;
+    transition: background-color 0.2s;
+}
+.google-btn:hover {
+    background-color: #357ae8;
+}
+
+/* ==================================================== */
+/* == SEU CSS (Adaptado e Mesclado) == */
+/* ==================================================== */
+
+/* Seu CSS Existente (Corpo e Tema Claro) */
 body.light-theme {
     background: #f3f3f3;
     color: #000;
 }
-
 .sidebar {
     position: fixed;
     top: 0;
@@ -34,6 +71,7 @@ body.light-theme {
     text-align: center;
 }
 
+/* Cartão de Configurações (settings-card) - Fundo consistente */
 .settings-card {
     background: #1a1d23;
     padding: 30px;
@@ -70,12 +108,13 @@ body.light-theme .settings-card {
     opacity: 0.8;
 }
 
+/* Ícone de Sobreposição (Overlay Icon) - Cor primária */
 .overlay-icon {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: #2a62fc;
+    color: #3b82f6; /* Usando o novo azul primário */
     font-size: 30px;
     pointer-events: none;
     opacity: 0;
@@ -101,20 +140,20 @@ body.light-theme .settings-card {
     opacity: 0.8;
 }
 
-/* ===== Inputs e selects dentro de .input-group melhorados ===== */
+/* Inputs e selects - Fundo escuro e cor de foco consistente */
 .input-group input,
 .input-group select {
-    background: #1f2229;            /* fundo escuro */
-    color: #fff;                    /* texto branco */
-    border: 1px solid #3a3d45;      /* borda sutil */
-    border-radius: 12px;             /* borda arredondada */
+    background: #1f2229; 
+    color: #fff;
+    border: 1px solid #3a3d45;
+    border-radius: 12px;
     padding: 10px 15px;
     font-size: 16px;
     outline: none;
     transition: all 0.3s ease;
 }
 
-/* Remove a seta padrão do select e adiciona customizada */
+/* Select custom arrow (SVG) */
 .input-group select {
     appearance: none;
     -webkit-appearance: none;
@@ -126,46 +165,44 @@ body.light-theme .settings-card {
     cursor: pointer;
 }
 
-/* Hover */
+/* Hover de Inputs/Selects - Cor primária */
 .input-group input:hover,
 .input-group select:hover {
-    border-color: #2a62fc;
+    border-color: #3b82f6;
 }
 
-/* Foco */
+/* Foco de Inputs/Selects - Cor primária e Sombra */
 .input-group input:focus,
 .input-group select:focus {
-    border-color: #2a62fc;
-    box-shadow: 0 0 10px rgba(42, 98, 252, 0.5);
+    border-color: #3b82f6;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
 }
 
-/* ===== Textarea da Bio ===== */
+/* Textarea da Bio - Foco/Hover consistente */
 .input-group textarea {
-    background: #1f2229;       /* fundo escuro consistente */
-    color: #fff;               /* texto branco */
-    border: 1px solid #3a3d45; /* borda sutil */
-    border-radius: 12px;        /* bordas arredondadas */
-    padding: 12px 15px;         /* espaçamento interno */
+    background: #1f2229;
+    color: #fff;
+    border: 1px solid #3a3d45;
+    border-radius: 12px;
+    padding: 12px 15px;
     font-size: 16px;
     line-height: 1.5;
-    resize: vertical;           /* só permite redimensionar verticalmente */
-    min-height: 100px;          /* altura mínima confortável */
+    resize: vertical;
+    min-height: 100px;
     transition: all 0.3s ease;
 }
 
-/* Hover */
 .input-group textarea:hover {
-    border-color: #2a62fc;
+    border-color: #3b82f6;
 }
 
-/* Foco */
 .input-group textarea:focus {
-    border-color: #2a62fc;
-    box-shadow: 0 0 10px rgba(42, 98, 252, 0.5);
+    border-color: #3b82f6;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
     outline: none;
 }
 
-/* Tema claro */
+/* Tema claro para Inputs */
 body.light-theme .input-group input,
 body.light-theme .input-group select,
 body.light-theme .input-group textarea {
@@ -177,7 +214,7 @@ body.light-theme .input-group textarea {
 .input-group input:focus,
 .input-group select:focus,
 .input-group textarea:focus {
-    border-color: #2a62fc;
+    border-color: #3b82f6;
 }
 
 .theme-toggle {
@@ -187,6 +224,7 @@ body.light-theme .input-group textarea {
     align-items: center;
 }
 
+/* Botão de Tema (#themeBtn) */
 #themeBtn {
     background: #30353f;
     border: none;
@@ -198,12 +236,13 @@ body.light-theme .input-group textarea {
 }
 
 #themeBtn:hover {
-    background: #2a62fc;
+    background: #2563eb; /* Usando o hover azul */
 }
 
-.save-btn {
+/* Botões de Ação (save-btn, diet-btn) - Cor primária e Hover consistente */
+.save-btn, .diet-btn {
     margin-top: 10px;
-    background: #2a62fc;
+    background: #3b82f6; /* Usando o azul primário */
     border: none;
     padding: 12px 40px;
     border-radius: 10px;
@@ -213,10 +252,11 @@ body.light-theme .input-group textarea {
     transition: 0.2s;
 }
 
-.save-btn:hover {
-    background: #30353f;
+.save-btn:hover, .diet-btn:hover {
+    background: #2563eb; /* Usando o hover azul */
 }
 
+/* Cartão de Dieta (diet-card) - Fundo consistente */
 .diet-card {
     background: #1a1d23;
     padding: 25px;
@@ -233,15 +273,11 @@ body.light-theme .diet-card {
     color: #000;
 }
 
-.diet-input label {
-    font-size: 15px;
-    opacity: 0.8;
-}
-
+/* Inputs de Dieta - Consistência de cores */
 .diet-input input,
 .diet-input select {
-    background: #0f1115;
-    border: 1px solid #24272e;
+    background: #1f2229; /* Fundo escuro como os outros inputs */
+    border: 1px solid #3a3d45; 
     border-radius: 8px;
     padding: 10px;
     color: white;
@@ -250,35 +286,13 @@ body.light-theme .diet-card {
     transition: 0.2s;
 }
 
-body.light-theme .diet-input input,
-body.light-theme .diet-input select {
-    background: #f0f0f0;
-    color: #000;
-    border: 1px solid #ccc;
-}
-
 .diet-input input:focus,
 .diet-input select:focus {
-    border-color: #2a62fc;
-}
-
-.diet-btn {
-    background: #2a62fc;
-    border: none;
-    padding: 12px 40px;
-    border-radius: 10px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.diet-btn:hover {
-    background: #30353f;
+    border-color: #3b82f6;
 }
 
 #resultado {
-    background: #0f1115;
+    background: #1f2229; /* Fundo escuro para contraste */
     padding: 15px;
     border-radius: 10px;
     width: 100%;
