@@ -66,7 +66,7 @@ if (isset($_SESSION['login_error'])) {
 
         <p class="mt-4 text-center text-sm text-gray-400">
             Não tem uma conta? 
-            <a href="../Regist/regist.php" class="text-primary hover:text-green-400 font-semibold transition-colors">Crie uma aqui.</a>
+            <a href="../Regist/registo.php" class="text-primary hover:text-green-400 font-semibold transition-colors">Crie uma aqui.</a>
         </p>
 
         <div id="messageBox" class="mt-4 text-center">
