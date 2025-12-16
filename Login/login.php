@@ -29,20 +29,7 @@ if (isset($_SESSION['login_error'])) {
     
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <style>
-        /* Estilos Customizados (Manter para o Tailwind) */
-        .text-primary { color: #10B981; } 
-        .focus\:ring-primary:focus { --tw-ring-color: #10B981; }
-        .bg-primary { background-color: #10B981; }
-        .google-btn {
-            background-color: #f8f9fa; 
-            color: #1F2937; 
-            border: 1px solid #d4d8d9;
-        }
-        .auth-card {
-            background-color: #1f2937; 
-        }
-    </style>
+
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 bg-gray-950">
 
@@ -72,14 +59,14 @@ if (isset($_SESSION['login_error'])) {
                 <label for="log_password" class="block text-sm font-medium text-gray-300 mb-1">Palavra-passe</label>
                 <input type="password" id="log_password" name="password" placeholder="a sua palavra-passe" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-gray-200">
             </div>
-            <button type="submit" class="bg-primary hover:bg-green-600 w-full py-3 px-4 rounded-lg font-bold transition-colors shadow-lg shadow-green-900/40">
+            <button type="submit" class="color-primary color-primary-hover w-full py-3 px-4 rounded-lg font-bold transition-colors shadow-lg shadow-blue-900/40">
                 Iniciar Sessão
             </button>
         </form>
 
         <p class="mt-4 text-center text-sm text-gray-400">
             Não tem uma conta? 
-            <a href="../Regist/regist.php" class="text-primary hover:text-green-400 font-semibold transition-colors">Crie uma aqui.</a>
+            <a href="../Regist/registo.php" class="text-primary hover:text-green-400 font-semibold transition-colors">Crie uma aqui.</a>
         </p>
 
         <div id="messageBox" class="mt-4 text-center">

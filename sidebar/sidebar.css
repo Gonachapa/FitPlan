@@ -1,125 +1,139 @@
 /* Estilos Globais e da Sidebar */
 body {
-margin: 0;
-font-family: Arial, sans-serif;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
 .sidebar {
-width: 250px;
-height: 100vh;
-background: #1a1d23;
-color: #fff;
-/* Ajustei o padding para deixar espaço para o bloco do utilizador no fundo */
-padding: 20px; 
-padding-top: 80px; 
-padding-bottom: 90px; /* Espaço para o user-info */
-position: fixed;
-box-shadow: 2px 0 5px rgba(0,0,0,0.5);
-display: flex;
-flex-direction: column; /* Para ajudar a posicionar o menu e o footer */
-box-sizing: border-box; /* Garante que padding e borda não aumentam o tamanho total */
+    width: 250px;
+    height: 100vh;
+    background: #1a1d23;
+    color: #fff;
+    /* Ajustado para acomodar o contentor fixo no fundo */
+    padding: 20px; 
+    padding-top: 80px; 
+    padding-bottom: 90px;
+    position: fixed;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box; 
 }
 
 .sidebar h2 {
-margin: 0 0 30px 0;
-font-size: 26px;
-font-weight: bold;
-text-align: center;
-color: #2a62fc; 
+    margin: 0 0 30px 0;
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+    color: #2a62fc; /* Cor de destaque azul */
 }
 
 /* Estilos da Pesquisa */
 .search-box {
-margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 .search-box input {
-width: 100%; 
-padding: 10px;
-background: #0f1115;
-border: none;
-border-radius: 5px;
-color: #fff;
-font-size: 14px;
-box-sizing: border-box;
+    width: 100%; 
+    padding: 10px;
+    background: #0f1115;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 14px;
+    box-sizing: border-box;
 }
 
 /* Estilos do Menu */
 .menu {
-list-style: none;
-padding: 0;
-flex-grow: 1; /* Permite que o menu ocupe todo o espaço disponível */
-margin: 0 0 20px 0; 
+    list-style: none;
+    padding: 0;
+    flex-grow: 1; 
+    margin: 0 0 20px 0; 
 }
 
 .menu li {
-margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .menu li a {
-display: block;
-padding: 12px;
-color: #ccc;
-text-decoration: none;
-border-radius: 5px;
-transition: 0.3s;
+    display: block;
+    padding: 12px;
+    color: #ccc;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
 }
 
 .menu li a:hover {
-background: #2a62fc;
-color: #222;
-font-weight: bold;
+    background: #2a62fc;
+    color: #222;
+    font-weight: bold;
 }
 
 /* Estilos do Conteúdo Principal */
 .main-content {
-margin-left: 270px;
-padding: 20px;
+    margin-left: 270px;
+    padding: 20px;
 }
 
-/* --- Estilos para o Perfil do Utilizador no Rodapé (NOVO) --- */
+/* ======================================================== */
+/* == BLOCO DO UTILIZADOR (FINAL LIMPO) == */
+/* ======================================================== */
 
+/* 1. Container Wrapper (Posicionamento Fixo) */
+.user-info-wrapper {
+    position: absolute; 
+    bottom: 20px; 
+    left: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+/* 2. Bloco do Utilizador */
 .user-info {
-position: absolute; /* Chave para fixar no rodapé */
-bottom: 20px; /* Distância do fundo da sidebar */
-left: 20px;
-right: 20px;
-display: flex;
-align-items: center;
-padding: 10px;
-background-color: #262932; /* Fundo escuro para o bloco */
-border-radius: 8px;
-cursor: pointer;
-transition: background-color 0.2s;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+    position: static; 
+    width: 100%; 
+    
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #262932;
+    border-radius: 8px;
+    cursor: default; /* Cursor padrão */
+    transition: background-color 0.2s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+    overflow: hidden; 
 }
 
 .user-info:hover {
-background-color: #333742;
+    background-color: #333742;
 }
 
+/* Avatar e Nome */
 .user-avatar-container {
-width: 40px;
-height: 40px;
-border-radius: 50%; /* Circular */
-overflow: hidden;
-margin-right: 12px;
-border: 2px solid #3a3d45; /* Anel amarelo/laranja */
-flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 12px;
+    border: 2px solid #3a3d45; 
+    flex-shrink: 0;
 }
 
 .user-avatar-img {
-width: 100%;
-height: 100%;
-object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .user-name {
-color: #fff;
-font-size: 15px;
-font-weight: 600;
-margin: 0;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
