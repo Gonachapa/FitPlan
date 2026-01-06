@@ -44,8 +44,8 @@ if ($conn->connect_error) {
 $is_email = filter_var($identifier, FILTER_VALIDATE_EMAIL);
 $search_column = $is_email ? 'email' : 'nome';
 
-// Consulta com 'foto_perfil'
-$sql = "SELECT id_utilizador, nome, email, senha_hash, foto_perfil FROM Utilizador WHERE {$search_column} = ?";
+// --- ALTERAÇÃO AQUI: Adicionado 'tema' no SELECT ---
+$sql = "SELECT id_utilizador, nome, email, senha_hash, foto_perfil, tema FROM Utilizador WHERE {$search_column} = ?";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $identifier);
@@ -78,6 +78,9 @@ if (password_verify($password_raw, $user['senha_hash'])) {
     $_SESSION['user_nome'] = $user['nome'];
     $_SESSION['user_avatar'] = $user['foto_perfil']; // Armazena o caminho da imagem
     
+    // --- ALTERAÇÃO AQUI: Guardar o tema na sessão ---
+    $_SESSION['user_tema'] = $user['tema'] ?? 'dark'; 
+
     $_SESSION['user_email'] = $user['email'];
 
     $_SESSION['login_success'] = "Bem-vindo(a), " . htmlspecialchars($user['nome']) . "!";

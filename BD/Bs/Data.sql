@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS Utilizador (
     genero ENUM('M','F','Outro'),
     altura DECIMAL(5,2),
     peso_atual DECIMAL(5,2),
-    data_nascimento DATE
+    data_nascimento DATE,
+    tema VARCHAR(10) DEFAULT 'dark'
 );
 
 -- =========================
@@ -74,9 +75,16 @@ CREATE TABLE IF NOT EXISTS Treino_Exercicio (
 CREATE TABLE IF NOT EXISTS Dieta (
     id_dieta INT AUTO_INCREMENT PRIMARY KEY,
     id_utilizador INT NOT NULL,
-    calorias_totais INT,
-    hidratos DECIMAL(6,2),
-    gordura DECIMAL(6,2),
+    peso DECIMAL(5,2),              -- Peso no momento do cálculo
+    altura DECIMAL(5,2),            -- Altura no momento do cálculo
+    idade INT,                      -- Idade no momento do cálculo
+    tmb INT,                        -- Taxa Metabólica Basal
+    calorias_totais INT,            -- Calorias para Manutenção
+    cutting INT,                    -- Calorias para Perda de Peso
+    bulking INT,                    -- Calorias para Ganho de Massa
+    imc DECIMAL(4,1),               -- Índice de Massa Corporal
+    gordura_percent DECIMAL(4,1),   -- Percentual de Gordura
+    data_registo TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Data automática
     FOREIGN KEY (id_utilizador) REFERENCES Utilizador(id_utilizador) ON DELETE CASCADE
 );
 
@@ -149,3 +157,5 @@ INSERT INTO Exercicio (nome, grupo_muscular, musculo_principal, musculo_secundar
 ( 'Crunch Abdominal','Core','Reto Abdominal','Oblíquos', 'Corpo'),
 ( 'Elevação de Pernas','Core','Abdominais Inferiores','Flexores da Anca', 'Corpo'),
 ( 'Russian Twist','Core','Oblíquos','Reto Abdominal', 'Halteres');
+
+ALTER TABLE Utilizador ADD COLUMN tema VARCHAR(10) DEFAULT 'dark';
