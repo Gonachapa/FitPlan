@@ -158,4 +158,11 @@ INSERT INTO Exercicio (nome, grupo_muscular, musculo_principal, musculo_secundar
 ( 'Elevação de Pernas','Core','Abdominais Inferiores','Flexores da Anca', 'Corpo'),
 ( 'Russian Twist','Core','Oblíquos','Reto Abdominal', 'Halteres');
 
-ALTER TABLE Utilizador ADD COLUMN tema VARCHAR(10) DEFAULT 'dark';
+CREATE TABLE IF NOT EXISTS Seguidores (
+    id_seguidor INT NOT NULL,      -- Quem segue
+    id_seguido INT NOT NULL,       -- Quem é seguido
+    data_seguido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_seguidor, id_seguido),
+    FOREIGN KEY (id_seguidor) REFERENCES Utilizador(id_utilizador) ON DELETE CASCADE,
+    FOREIGN KEY (id_seguido) REFERENCES Utilizador(id_utilizador) ON DELETE CASCADE
+);

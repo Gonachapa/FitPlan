@@ -16,10 +16,9 @@ $conn->set_charset("utf8mb4");
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 $user_name = isset($_SESSION['user_nome']) ? htmlspecialchars($_SESSION['user_nome']) : 'Convidado';
 
-// --- NOVO: PEGAR O TEMA DA SESSÃO ---
+// --- PEGAR O TEMA DA SESSÃO ---
 $user_theme = isset($_SESSION['user_tema']) ? $_SESSION['user_tema'] : 'dark';
 
-// Se por algum motivo o tema não estiver na sessão mas o user estiver logado, podes ir buscar à BD
 if ($user_id && !isset($_SESSION['user_tema'])) {
     $res_tema = $conn->query("SELECT tema FROM Utilizador WHERE id_utilizador = $user_id");
     if ($row_tema = $res_tema->fetch_assoc()) {
@@ -44,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_save'])) {
     exit;
 }
 
-// --- 4. BUSCAR ÚLTIMOS 10 REGISTOS DA BASE DE DADOS ---
+// --- 4. BUSCAR ÚLTIMOS 10 REGISTOS ---
 $historico_bd = [];
 if ($user_id) {
     $res = $conn->query("SELECT * FROM Dieta WHERE id_utilizador = $user_id ORDER BY id_dieta DESC LIMIT 10");
@@ -59,23 +58,128 @@ if ($user_id) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dieta Inteligente - Fit Plan</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="sidebar/button.css">
-</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg: <?= $user_theme === 'light' ? '#f8fafc' : '#0c0f16' ?>;
+            --card: <?= $user_theme === 'light' ? '#ffffff' : '#1a1d23' ?>;
+            --text: <?= $user_theme === 'light' ? '#1e293b' : '#f8fafc' ?>;
+            --accent: #2a62fc;
+            --border: <?= $user_theme === 'light' ? '#e2e8f0' : '#333742' ?>;
+        }
 
-<body class="<?= $user_theme === 'light' ? 'light-theme' : '' ?>">
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            transition: 0.3s;
+            overflow-x: hidden;
+        }
+
+        /* CENTRALIZAÇÃO DA PÁGINA */
+        .main-content { 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; /* Alinha ao topo com padding */
+            min-height: 100vh;
+            padding: 60px 20px;
+            transition: 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .settings-card { 
+            background: var(--card); 
+            padding: 30px; 
+            border-radius: 20px; 
+            border: 1px solid var(--border); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 550px; /* Um pouco mais estreito para parecer mais elegante */
+            text-align: center;
+        }
+
+        #toggleSidebar { position: fixed; z-index: 1100; }
+
+        #sidebarIframe {
+            position: fixed;
+            left: -300px;
+            top: 0;
+            width: 300px;
+            height: 100vh;
+            border: none;
+            z-index: 1000;
+            transition: 0.3s;
+            background: var(--card);
+        }
+        #sidebarIframe.show { left: 0; }
+        
+        h1 { margin-bottom: 10px; font-size: 24px; }
+        
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px; opacity: 0.8; }
+        
+        .input-group input, .input-group select { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 10px; 
+            border: 1px solid var(--border); 
+            background: <?= $user_theme === 'light' ? '#fff' : '#222' ?>; 
+            color: var(--text);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .save-btn { 
+            width: 100%; 
+            padding: 14px; 
+            background: var(--accent); 
+            color: white; 
+            border: none; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .save-btn:hover { filter: brightness(1.1); }
+
+        #resultado { 
+            margin-top: 20px; 
+            padding: 15px; 
+            background: rgba(42, 98, 252, 0.1); 
+            border-radius: 12px; 
+            border: 1px solid var(--accent);
+            text-align: left;
+        }
+
+        .hist-item {
+            border-bottom: 1px solid var(--border);
+            padding: 12px 0;
+            font-size: 13px;
+            color: var(--text);
+            text-align: left;
+        }
+        
+        .hist-item:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
 
 <button id="toggleSidebar">></button>
 <iframe id="sidebarIframe" src="sidebar/sidebar.php"></iframe>
 
-<div class="main-content">
-    <div class="settings-card calculator-card">
+<div class="main-content" id="mainContent">
+    <div class="settings-card">
         <h1>Calculadora de Dieta</h1>
-        <p>Olá, <strong><?= $user_name ?></strong>! Calcule as suas necessidades calóricas.</p>
+        <p style="margin-bottom: 25px; opacity: 0.7;">Olá, <strong><?= $user_name ?></strong>! Insira os seus dados abaixo.</p>
         
         <div class="input-group">
             <label>Peso (kg)</label>
-            <input type="number" id="peso" placeholder="Ex: 70">
+            <input type="number" id="peso" placeholder="Ex: 70" step="0.1">
         </div>
 
         <div class="input-group">
@@ -99,30 +203,30 @@ if ($user_id) {
         <div class="input-group">
             <label>Nível de Atividade</label>
             <select id="atividade">
-                <option value="1.2">Sedentário</option>
-                <option value="1.375">Leve</option>
-                <option value="1.55">Moderado</option>
-                <option value="1.725">Intenso</option>
-                <option value="1.9">Muito intenso</option>
+                <option value="1.2">Sedentário (Pouco ou nenhum exercício)</option>
+                <option value="1.375">Leve (1-3 dias por semana)</option>
+                <option value="1.55">Moderado (3-5 dias por semana)</option>
+                <option value="1.725">Intenso (6-7 dias por semana)</option>
+                <option value="1.9">Muito intenso (Atleta/Trabalho físico)</option>
             </select>
         </div>
 
         <button class="save-btn" onclick="calcular()">Calcular e Guardar</button>
 
-        <div id="resultado" class="input-group"></div>
+        <div id="resultado" style="display:none;"></div>
 
-        <div id="historico-container" style="margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px;">
-            <h4 style="font-size: 0.85rem; color: #333; margin-bottom: 8px;">Histórico (Últimos 10 registos)</h4>
-            <div id="lista-historico" style="font-size: 0.72rem; color: #666; line-height: 1.5;">
+        <div id="historico-container" style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px;">
+            <h4 style="text-align: left; margin-bottom: 15px;"><i class="fa-solid fa-clock-rotate-left"></i> Histórico Recente</h4>
+            <div id="lista-historico">
                 <?php if (!$user_id): ?>
                     <em>Faça login para ver o seu histórico.</em>
                 <?php elseif (empty($historico_bd)): ?>
-                    <em>Sem registos anteriores na base de dados.</em>
+                    <em>Sem registos anteriores.</em>
                 <?php else: ?>
                     <?php foreach ($historico_bd as $reg): ?>
-                        <div style="border-bottom: 1px dashed #ddd; padding: 4px 0;">
-                            <strong><?= date('d/m', strtotime($reg['data_registo'])) ?></strong>: 
-                            <?= $reg['peso'] ?>kg | IMC: <?= $reg['imc'] ?> | TMB: <?= $reg['tmb'] ?> | Maint: <?= $reg['calorias_totais'] ?>kcal | G: <?= $reg['gordura_percent'] ?>%
+                        <div class="hist-item">
+                            <span style="color: var(--accent); font-weight: bold;"><?= date('d/m', strtotime($reg['data_registo'])) ?></span>: 
+                            <?= $reg['peso'] ?>kg | IMC: <?= $reg['imc'] ?> | <strong><?= $reg['calorias_totais'] ?> kcal</strong>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -132,7 +236,6 @@ if ($user_id) {
 </div>
 
 <script>
-// O teu JavaScript de calcular() continua igual aqui...
 function calcular() {
     const peso = parseFloat(document.getElementById("peso").value);
     const altura = parseFloat(document.getElementById("altura").value);
@@ -156,7 +259,7 @@ function calcular() {
     const formData = new FormData();
     formData.append('ajax_save', '1');
     formData.append('peso', peso);
-    formData.append('altura', altura);
+    formData.append('altura', alturaM);
     formData.append('idade', idade);
     formData.append('tmb', tmb.toFixed(0));
     formData.append('man', man.toFixed(0));
@@ -169,28 +272,31 @@ function calcular() {
     .then(res => res.json())
     .then(data => {
         if(data.status === 'success') {
-             location.reload(); 
+             // Mostra o resultado antes de recarregar
+             document.getElementById("resultado").style.display = "block";
+             document.getElementById("resultado").innerHTML = `
+                <h3 style="margin-top:0">Resultados Guardados!</h3>
+                <p><b>Manutenção:</b> ${man.toFixed(0)} kcal/dia</p>
+                <p><b>Cutting:</b> ${cut.toFixed(0)} kcal | <b>Bulking:</b> ${bulk.toFixed(0)} kcal</p>
+                <p><b>IMC:</b> ${imc.toFixed(1)} | <b>Gordura:</b> ${gord.toFixed(1)}%</p>
+             `;
+             setTimeout(() => location.reload(), 1500);
         }
     });
-
-    document.getElementById("resultado").innerHTML = `
-        <h3>Resultados Atuais:</h3>
-        <p><b>TMB:</b> ${tmb.toFixed(0)} kcal</p>
-        <p><b>Manutenção:</b> ${man.toFixed(0)} kcal/dia</p>
-        <hr>
-        <p><b>IMC:</b> ${imc.toFixed(1)}</p>
-        <p><b>Gordura:</b> ${gord.toFixed(1)}%</p>
-    `;
 }
 
-// Sidebar logic
-const toggleButton = document.getElementById('toggleSidebar');
+// Lógica de Sidebar igual à Dashboard e Perfil
+const toggleBtn = document.getElementById('toggleSidebar');
 const sidebar = document.getElementById('sidebarIframe');
-if (toggleButton && sidebar) {
-    toggleButton.addEventListener('click', () => {
-        sidebar.classList.toggle('show');
-        toggleButton.textContent = sidebar.classList.contains('show') ? '<' : '>';
-    });
+const mainContent = document.getElementById('mainContent');
+
+if (toggleBtn && sidebar) {
+    toggleBtn.onclick = () => {
+        const isOpen = sidebar.classList.toggle('show');
+        toggleBtn.textContent = isOpen ? '<' : '>';
+        // Move o conteúdo para o lado quando a sidebar abre
+        mainContent.style.paddingLeft = isOpen ? "320px" : "20px";
+    };
 }
 </script>
 
