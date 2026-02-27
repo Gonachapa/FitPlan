@@ -55,7 +55,14 @@ $result = $stmt->get_result();
 if ($result->num_rows === 0) {
     $stmt->close();
     $conn->close();
-    $_SESSION['login_error'] = "Credenciais inválidas. Verifique o identificador e a palavra-passe.";
+    
+    // Mensagem específica conforme o tipo de identificador
+    if ($is_email) {
+        $_SESSION['login_error'] = "Não existe conta com este email.";
+    } else {
+        $_SESSION['login_error'] = "Não existe conta com este nome de utilizador.";
+    }
+    
     header("Location: login.php");
     exit;
 }

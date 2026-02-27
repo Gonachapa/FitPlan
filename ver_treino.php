@@ -31,6 +31,12 @@ $treino = $stmt->get_result()->fetch_assoc();
 
 if (!$treino) { die("Treino não encontrado."); }
 
+// Se o treino for privado e o utilizador logado não for o dono, negar acesso
+if ($treino['privado'] && $user_id_logado !== $treino['dono_id']) {
+    header("Location: perfil.php?id=" . $treino['dono_id'] . "&erro=acesso_negado");
+    exit;
+}
+
 // 4. CARREGAR EXERCÍCIOS (Usando as tuas colunas exatas)
 $queryExs = "SELECT e.nome, e.grupo_muscular, e.equipamento, te.sets_sugeridos, te.nota_planeada, te.tempo_descanso_seg, te.ordem 
              FROM Treino_Exercicio te 

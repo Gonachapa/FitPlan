@@ -62,13 +62,19 @@ $profile_image_url = !empty($row['foto_perfil']) ? $row['foto_perfil'] : 'Defaul
 
 $erro_nome = isset($_GET['erro']) && $_GET['erro'] == 'nome_duplicado' ? "Este nome já está em uso!" : "";
 
-$lista_seguidores = $conn->query("SELECT u.id_utilizador, u.nome, u.foto_perfil FROM Seguidores s JOIN Utilizador u ON s.id_seguidor = u.id_utilizador WHERE s.id_seguido = $perfil_visualizado_id");
-$lista_seguindo = $conn->query("SELECT u.id_utilizador, u.nome, u.foto_perfil FROM Seguidores s JOIN Utilizador u ON s.id_seguidor = u.id_utilizador WHERE s.id_seguidor = $perfil_visualizado_id");
+$lista_seguidores = $conn->query("SELECT u.id_utilizador, u.nome, u.foto_perfil FROM Seguidores s JOIN Utilizador u ON s.id_seguidor = u.id_utilizador WHERE s.id_seguido = $perfil_visualizado_id AND u.id_utilizador <> $perfil_visualizado_id");
+$lista_seguindo = $conn->query("SELECT u.id_utilizador, u.nome, u.foto_perfil FROM Seguidores s JOIN Utilizador u ON s.id_seguido = u.id_utilizador WHERE s.id_seguidor = $perfil_visualizado_id AND u.id_utilizador <> $perfil_visualizado_id");
 $num_seguidores = $lista_seguidores->num_rows;
 $num_seguindo = $lista_seguindo->num_rows;
 $check = $conn->query("SELECT * FROM Seguidores WHERE id_seguidor = $logado_id AND id_seguido = $perfil_visualizado_id");
 $ja_segue = $check->num_rows > 0;
-$lista_treinos = $conn->query("SELECT t.*, (SELECT COUNT(*) FROM Treino_Exercicio te WHERE te.id_treino = t.id_treino) as total_exercicios FROM Treino t WHERE t.id_utilizador = $perfil_visualizado_id ORDER BY t.data_criacao DESC");
+if ($e_o_proprio) {
+    // owner can see all routines
+    $lista_treinos = $conn->query("SELECT t.*, (SELECT COUNT(*) FROM Treino_Exercicio te WHERE te.id_treino = t.id_treino) as total_exercicios FROM Treino t WHERE t.id_utilizador = $perfil_visualizado_id ORDER BY t.data_criacao DESC");
+} else {
+    // only public routines for other users
+    $lista_treinos = $conn->query("SELECT t.*, (SELECT COUNT(*) FROM Treino_Exercicio te WHERE te.id_treino = t.id_treino) as total_exercicios FROM Treino t WHERE t.id_utilizador = $perfil_visualizado_id AND privado = 0 ORDER BY t.data_criacao DESC");
+}
 
 $interface_theme = $_SESSION['user_tema'] ?? $row['tema'];
 ?>
@@ -116,6 +122,14 @@ $interface_theme = $_SESSION['user_tema'] ?? $row['tema'];
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: var(--card); padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; border: 1px solid var(--border); max-height: 70vh; overflow-y: auto; }
         
+        /* follower/following list items */
+        .user-item { display: flex; align-items: center; gap: 12px; padding: 10px 8px; text-decoration: none; color: var(--text); border-bottom: 1px solid var(--border); transition: background 0.2s; }
+        .user-item:hover { background: rgba(255,255,255,0.05); }
+        .user-item img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+        .user-item span { font-size: 14px; font-weight: 500; }
+        .modal-content h3 { margin-top: 0; margin-bottom: 15px; font-size: 18px; }
+        .modal-content { padding: 20px 25px; }
+
         .treino-card { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid var(--border); }
         .btn-action { padding: 10px 20px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; display: inline-block; text-decoration: none; font-size: 13px; }
         .btn-edit { background: var(--primary); color: #fff; width: 100%; margin-top: 10px; }
@@ -191,8 +205,28 @@ $interface_theme = $_SESSION['user_tema'] ?? $row['tema'];
         </div>
     </div>
 
-    <div id="modalSeguidores" class="modal" onclick="closeListModal('modalSeguidores')"><div class="modal-content" onclick="event.stopPropagation()"><h3>Seguidores</h3><?php $lista_seguidores->data_seek(0); while($s = $lista_seguidores->fetch_assoc()): ?><a href="perfil.php?id=<?= $s['id_utilizador'] ?>" class="user-item"><img src="<?= $s['foto_perfil'] ?: 'DefaultIcons/miku.png' ?>"><span><?= htmlspecialchars($s['nome']) ?></span></a><?php endwhile; ?></div></div>
-    <div id="modalSeguindo" class="modal" onclick="closeListModal('modalSeguindo')"><div class="modal-content" onclick="event.stopPropagation()"><h3>A seguir</h3><?php $lista_seguindo->data_seek(0); while($s = $lista_seguindo->fetch_assoc()): ?><a href="perfil.php?id=<?= $s['id_utilizador'] ?>" class="user-item"><img src="<?= $s['foto_perfil'] ?: 'DefaultIcons/miku.png' ?>"><span><?= htmlspecialchars($s['nome']) ?></span></a><?php endwhile; ?></div></div>
+    <div id="modalSeguidores" class="modal" onclick="closeListModal('modalSeguidores')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3>Seguidores</h3>
+            <?php $lista_seguidores->data_seek(0); while($s = $lista_seguidores->fetch_assoc()): ?>
+                <a href="perfil.php?id=<?= $s['id_utilizador'] ?>" class="user-item">
+                    <img src="<?= $s['foto_perfil'] ?: 'DefaultIcons/miku.png' ?>">
+                    <span><?= htmlspecialchars($s['nome']) ?></span>
+                </a>
+            <?php endwhile; ?>
+        </div>
+    </div>
+    <div id="modalSeguindo" class="modal" onclick="closeListModal('modalSeguindo')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3>A seguir</h3>
+            <?php $lista_seguindo->data_seek(0); while($s = $lista_seguindo->fetch_assoc()): ?>
+                <a href="perfil.php?id=<?= $s['id_utilizador'] ?>" class="user-item">
+                    <img src="<?= $s['foto_perfil'] ?: 'DefaultIcons/miku.png' ?>">
+                    <span><?= htmlspecialchars($s['nome']) ?></span>
+                </a>
+            <?php endwhile; ?>
+        </div>
+    </div>
 
     <script>
         // Lógica de toggle exatamente igual à Dashboard
@@ -215,6 +249,30 @@ $interface_theme = $_SESSION['user_tema'] ?? $row['tema'];
                 const tema = document.body.classList.contains('light-theme') ? 'light' : 'dark';
                 const fd = new FormData(); fd.append('ajax_tema', tema);
                 fetch(window.location.href, { method: 'POST', body: fd });
+            });
+        }
+
+        // follow/unfollow button logic
+        const followBtn = document.getElementById('followBtn');
+        if (followBtn) {
+            followBtn.addEventListener('click', () => {
+                const isFollowing = followBtn.classList.contains('btn-unfollow');
+                const action = isFollowing ? 'deixar' : 'seguir';
+                const fd = new FormData();
+                fd.append('acao_seguir', action);
+
+                fetch(window.location.href, { method: 'POST', body: fd })
+                    .then(() => {
+                        if (isFollowing) {
+                            followBtn.textContent = 'Seguir';
+                            followBtn.classList.remove('btn-unfollow');
+                            followBtn.classList.add('btn-follow');
+                        } else {
+                            followBtn.textContent = 'Deixar de Seguir';
+                            followBtn.classList.remove('btn-follow');
+                            followBtn.classList.add('btn-unfollow');
+                        }
+                    });
             });
         }
     </script>

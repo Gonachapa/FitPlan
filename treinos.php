@@ -5,6 +5,29 @@ session_start();
 // --- LÓGICA DE TEMA DINÂMICO ---
 $user_theme = isset($_SESSION['user_tema']) ? $_SESSION['user_tema'] : 'dark';
 
+// determinate CSS variable values ahead of time to keep style block clean
+if ($user_theme === 'light') {
+    $css_vars = [
+        '--background-primary' => '#f8fafc',
+        '--card-background' => '#ffffff',
+        '--input-background' => '#f1f5f9',
+        '--border-color' => '#cbd5e1',
+        '--text-light' => '#0f172a',
+        '--text-muted' => '#64748b',
+        '--accent-blue' => '#2563eb',
+    ];
+} else {
+    $css_vars = [
+        '--background-primary' => '#0c0f16',
+        '--card-background' => '#1a1d23',
+        '--input-background' => '#1f2229',
+        '--border-color' => '#3a3d45',
+        '--text-light' => '#ffffff',
+        '--text-muted' => '#aaaaaa',
+        '--accent-blue' => '#3b82f6',
+    ];
+}
+
 // ===============================================
 // CONEXÃO COM A BASE DE DADOS
 // ===============================================
@@ -85,23 +108,11 @@ $meus_treinos = $stmtT->fetchAll();
     
     <style>
         :root {
-            <?php if ($user_theme === 'light'): ?>
-                --background-primary: #f8fafc;
-                --card-background: #ffffff;
-                --input-background: #f1f5f9;
-                --border-color: #cbd5e1;
-                --text-light: #0f172a;
-                --text-muted: #64748b;
-                --accent-blue: #2563eb;
-            <?php else: ?>
-                --background-primary: #0c0f16; 
-                --card-background: #1a1d23; 
-                --input-background: #1f2229; 
-                --border-color: #3a3d45; 
-                --text-light: #ffffff;
-                --text-muted: #aaaaaa;
-                --accent-blue: #3b82f6; 
-            <?php endif; ?>
+            /* fallback to avoid empty ruleset warning */
+            font-size: 100%;
+            <?php foreach ($css_vars as $key => $val): ?>
+                <?= $key ?>: <?= $val ?>;
+            <?php endforeach; ?>
         }
 
         body {
